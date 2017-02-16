@@ -415,9 +415,6 @@ class GenerateToolByDom4j{
 			
 			orderHelper_<%=cid%>.setOrder("<%=tool.connName + "_" + currEleName%>",order_<%=cid%>);
 			orderHelper_<%=cid%>.fillRecalculateOrderMap("<%=tool.connName + "_" + currEleName%>",false);
-		} else {
-			int order_<%=cid%> = orderHelper_<%=cid%>.order("<%=tool.connName + "_" + currEleName%>");
-			orderHelper_<%=cid%>.setOrder("<%=tool.connName + "_" + currEleName%>",++order_<%=cid%>);
 		}
 		
 		if(orderHelper_<%=cid%>.tailAppend("<%=tool.connName + "_" + currEleName%>")) {
