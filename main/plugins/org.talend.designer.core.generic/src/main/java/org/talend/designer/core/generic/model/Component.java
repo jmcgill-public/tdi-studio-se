@@ -31,6 +31,7 @@ import org.talend.commons.exception.BusinessException;
 import org.talend.components.api.component.ComponentDefinition;
 import org.talend.components.api.component.ComponentImageType;
 import org.talend.components.api.component.Connector;
+import org.talend.components.api.component.OutputComponentDefinition;
 import org.talend.components.api.component.PropertyPathConnector;
 import org.talend.components.api.component.VirtualComponentDefinition;
 import org.talend.components.api.properties.ComponentProperties;
@@ -947,6 +948,18 @@ public class Component extends AbstractBasicComponent {
         addStandardType(listConnector, EConnectionType.ON_COMPONENT_ERROR, parentNode);
         addStandardType(listConnector, EConnectionType.ON_SUBJOB_OK, parentNode);
         addStandardType(listConnector, EConnectionType.ON_SUBJOB_ERROR, parentNode);
+        
+        // 1.Any component can have outgoing iterate connector
+        // 2.Only standalone and input components can have incoming iterate connector
+        // 3.No transformer component was created in 6.2, so ignore this situation 
+        boolean isOutputComponent = componentDefinition instanceof OutputComponentDefinition || componentDefinition instanceof VirtualComponentDefinition;
+        INodeConnector iterateConnector = addStandardType(listConnector, EConnectionType.ITERATE, parentNode);
+        iterateConnector.setMaxLinkOutput(-1);
+        if (isOutputComponent) {
+            iterateConnector.setMaxLinkInput(0);
+        } else {
+            iterateConnector.setMaxLinkInput(1);
+        }   
 
         for (int i = 0; i < EConnectionType.values().length; i++) {
             EConnectionType currentType = EConnectionType.values()[i];
